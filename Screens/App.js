@@ -13,11 +13,10 @@ import {
   Switch
 } from "react-native";
 import firebase from "react-native-firebase";
-import { styles } from './styles/styles'
-import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import { styles } from "./styles/styles";
+import { AccessToken, LoginManager } from "react-native-fbsdk";
 
-
-class App extends Component {
+export default class App extends Component {
   state = {
     email: "",
     password: ""
@@ -28,12 +27,13 @@ class App extends Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {alert('Good job!')})
-
-  }
-
-
-
+      .then(() => {
+        alert("Good job!");
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
 
   render() {
     return (
@@ -55,35 +55,30 @@ class App extends Component {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-        
-        <TouchableOpacity
-          style={styles.SubmitButtonStyle}
-          activeOpacity={0.3}
-          onPress={() => this.loginUser()}
-        >
-          <Text style={styles.TextStyle}>Log In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.SubmitButtonStyle}
-          activeOpacity={0.3}
-          onPress={() => this.props.navigation.navigate("SignUpForm")}
-        >
-          <Text style={styles.TextStyle}>Create An Account</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.SubmitButtonStyle}
-          activeOpacity={0.3}
-          onPress={() => this.loginUserFb()}
-        >
-          <Text style={styles.TextStyle}>Facebook</Text>
-        </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.SubmitButtonStyle}
+            activeOpacity={0.3}
+            onPress={() => this.loginUser()}
+          >
+            <Text style={styles.TextStyle}>Log In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.SubmitButtonStyle}
+            activeOpacity={0.3}
+            onPress={() => this.props.navigation.navigate("SignUpForm")}
+          >
+            <Text style={styles.TextStyle}>Create An Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.SubmitButtonStyle}
+            activeOpacity={0.3}
+            onPress={() => this.loginUserFb()}
+          >
+            <Text style={styles.TextStyle}>Facebook</Text>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
       </View>
     );
   }
 }
-
-
-  
-
-export default App;
