@@ -58,3 +58,4 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 ios/GoogleService-Info.plist
+ios/NOMinate2/Info.plist
