@@ -35,6 +35,27 @@ export default class App extends Component {
       });
   };
 
+  loginFbUser = () => {
+    LoginManager.logInWithPermissions(["public_profile", "email"])
+      .then(result => {
+        if (result.isCancelled) {
+          return Promise.reject(new Error("The user cancelled the request"));
+        }
+
+        return AccessToken.getCurrentAccessToken();
+      })
+      .then(data => {
+        const credential = firebase.auth.FacebookAuthProvider.credential(
+          data.accessToken
+        );
+
+        return firebase.auth().signInWithCredential(credential);
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
+
   render() {
     return (
       <View style={styles.MainContainer}>
@@ -73,7 +94,7 @@ export default class App extends Component {
           <TouchableOpacity
             style={styles.SubmitButtonStyle}
             activeOpacity={0.3}
-            onPress={() => this.loginUserFb()}
+            onPress={() => this.loginFbUser()}
           >
             <Text style={styles.TextStyle}>Facebook</Text>
           </TouchableOpacity>
