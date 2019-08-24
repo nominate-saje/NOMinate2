@@ -11,12 +11,15 @@ import {
   Button,
   DatePickerIOS
 } from "react-native";
-import { styles } from "./styles/styles";
+import { styles } from "../styles/styles.js";
+import firebase from 'react-native-firebase'
 
 export default class SignUpScreen extends Component {
   constructor() {
     super();
     this.state = {
+      firstName: "",
+      lastName: "",
       email: "",
       password: ""
     };
@@ -28,29 +31,44 @@ export default class SignUpScreen extends Component {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        console.log(auth().currentUser.uid);
         fetch("https://us-central1-nominate-hr.cloudfunctions.net/api/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id: auth().currentUser.uid,
-            firstName: "test",
-            lastName: "User"
+            id: firebase.auth().currentUser.uid,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName
           })
         });
       })
       .then(() => {
-        alert("user added");
+        this.props.navigation.navigate("BottomTab")
       })
       .catch(error => {
         alert(error);
       });
   };
 
+
+
   render() {
     return (
       <View style={styles.MainContainer}>
         <Text style={styles.WelcomeText}>Please fill out:</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder="first name"
+          autoCapitalize="none"
+          onChangeText={firstName => this.setState({ firstName })}
+          value={this.state.firstName}
+        />
+          <TextInput
+          style={styles.textInput}
+          placeholder="last name"
+          autoCapitalize="none"
+          onChangeText={lastName => this.setState({ lastName })}
+          value={this.state.lastName}
+        />
         <TextInput
           style={styles.textInput}
           placeholder="email"
@@ -66,6 +84,7 @@ export default class SignUpScreen extends Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
+        
         <TouchableOpacity
           style={styles.SubmitButtonStyle}
           activeOpacity={0.3}

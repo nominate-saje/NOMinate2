@@ -63,3 +63,4 @@ ios/Podfile.lock
 ios/NOMinate2/Info.plist
 ios/Podfile.lock
 ios/
+*.plist

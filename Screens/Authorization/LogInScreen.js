@@ -12,10 +12,10 @@ import {
   AsyncStorage,
   Switch
 } from "react-native";
-import { styles } from "./styles/styles";
-import SignUpScreen from "./SignUpScreen"
-import firebase from 'react-native-firebase'
+import { styles } from "../styles/styles.js";
+import firebase from "react-native-firebase";
 import { AccessToken, LoginManager } from "react-native-fbsdk";
+import { SocialIcon } from "react-native-elements";
 
 export default class LogInScreen extends Component {
   state = {
@@ -23,13 +23,19 @@ export default class LogInScreen extends Component {
     password: ""
   };
 
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.props.navigation.navigate(user ? 'HomePageScreen' : 'LogInScreen')
+    })
+  }
+
   loginUser = () => {
     const { email, password } = this.state;
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        alert("Good job!");
+        this.props.navigation.navigate("BottomTab");
       })
       .catch(error => {
         alert(error);
@@ -51,6 +57,20 @@ export default class LogInScreen extends Component {
         );
 
         return firebase.auth().signInWithCredential(credential);
+      })
+      .then(() => {
+        fetch("https://us-central1-nominate-hr.cloudfunctions.net/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: firebase.auth().currentUser.uid,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName
+          })
+        });
+      })
+      .then(() => {
+        this.props.navigation.navigate("BottomTab");
       })
       .catch(error => {
         alert(error);
@@ -88,19 +108,20 @@ export default class LogInScreen extends Component {
           <TouchableOpacity
             style={styles.SubmitButtonStyle}
             activeOpacity={0.3}
-            onPress={() => this.props.navigation.navigate('SignUp')}
+            onPress={() => this.props.navigation.navigate("SignUpScreen")}
           >
             <Text style={styles.TextStyle}>Create An Account</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.SubmitButtonStyle}
-            activeOpacity={0.3}
+          <SocialIcon
+            title="Sign In With Facebook"
+            button
+            type="facebook"
+            style={styles.fbButtonStyle}
             onPress={() => this.loginFbUser()}
-          >
-            <Text style={styles.TextStyle}>Facebook</Text>
-          </TouchableOpacity>
+          />
         </KeyboardAvoidingView>
       </View>
     );
   }
 }
+

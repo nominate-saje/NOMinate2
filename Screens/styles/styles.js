@@ -2,15 +2,16 @@ import { StyleSheet }  from "react-native";
 
 export const styles = StyleSheet.create({
   WelcomeText: {
-    color: "white",
+    color: "#ff9900",
     textAlign: "center",
     flexDirection: "column",
-    fontSize: 50
+    fontSize: 50,
+    fontFamily: "AvenirNext-Heavy"
   },
   MainContainer: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#6D54A9",
+    backgroundColor: "white",
     flexDirection: "column"
   },
 
@@ -21,10 +22,20 @@ export const styles = StyleSheet.create({
     paddingBottom: 15,
     marginLeft: 30,
     marginRight: 30,
-    backgroundColor: "transparent",
+    backgroundColor: "#ff9900",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#fff"
+  },
+  fbButtonStyle: {
+    height: 50,
+    marginTop: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
+    marginLeft: 30,
+    marginRight: 30,
+    borderRadius: 10,
+    borderWidth: 1,
   },
 
   TextStyle: {
